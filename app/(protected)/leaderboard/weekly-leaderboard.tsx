@@ -27,17 +27,28 @@ export function WeeklyLeaderboard({
 
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!activeWeekId) return;
 
     setLoading(true);
+    setError(null);
     fetch(`/api/weekly-leaderboard?weekId=${activeWeekId}`)
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`${res.status}: ${text}`);
+        }
+        return res.json();
+      })
       .then((data) => {
         setEntries(data.entries || []);
       })
-      .catch(() => setEntries([]))
+      .catch((err) => {
+        setError(err.message);
+        setEntries([]);
+      })
       .finally(() => setLoading(false));
   }, [activeWeekId]);
 
@@ -71,6 +82,10 @@ export function WeeklyLeaderboard({
         <div className="flex justify-center py-12">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-rose-300 border-t-transparent" />
         </div>
+      ) : error ? (
+        <p className="text-center text-red-400 py-8 text-sm">
+          Error loading scores: {error}
+        </p>
       ) : entries.length === 0 ? (
         <p className="text-center text-white/70 py-8">
           No scores for this week.

@@ -14,7 +14,11 @@ export async function GET(request: Request) {
   try {
     const entries = await getWeeklyLeaderboard(parseInt(weekId, 10));
     return NextResponse.json({ entries });
-  } catch {
-    return NextResponse.json({ entries: [] }, { status: 500 });
+  } catch (err) {
+    console.error("Weekly leaderboard error:", err);
+    return NextResponse.json(
+      { entries: [], error: String(err) },
+      { status: 500 }
+    );
   }
 }
