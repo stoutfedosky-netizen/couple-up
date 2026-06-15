@@ -2,6 +2,8 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { scoreWeek } from "@/lib/scoring";
+import { isAdmin } from "@/lib/queries/admin";
 
 export async function GET() {
   try {
@@ -28,6 +30,21 @@ export async function GET() {
       weeks: weeks ?? [],
       weeksError: weeksErr?.message ?? null,
     });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const admin = await isAdmin();
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
+    const { weekId } = await request.json();
+    const result = await scoreWeek(weekId);
+    return NextResponse.json({ success: true, ...result });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }

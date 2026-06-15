@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin, resolveWeek as resolveWeekQuery } from "@/lib/queries/admin";
+import { scoreWeek } from "@/lib/scoring";
 import type { IslanderStatus } from "@/types/database";
 
 async function requireAdmin() {
@@ -103,9 +104,12 @@ export async function resolveWeekAction(payload: {
     payload.dumpedIds,
     payload.bonusAnswers
   );
+  await scoreWeek(payload.weekId);
   revalidatePath("/admin");
   revalidatePath("/islanders");
   revalidatePath("/leaderboard");
+  revalidatePath("/dashboard");
+  revalidatePath("/results");
 }
 
 // ─── Bonus Question Actions ───
