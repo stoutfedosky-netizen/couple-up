@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAllIslanders } from "@/lib/queries/islanders";
 import { IslanderGrid } from "@/components/islander-grid";
 

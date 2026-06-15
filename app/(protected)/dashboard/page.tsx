@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentWeek } from "@/lib/queries/weeks";
 import { getActiveIslanders } from "@/lib/queries/islanders";

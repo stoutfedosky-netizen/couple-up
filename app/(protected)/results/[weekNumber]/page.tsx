@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createClient } from "@/lib/supabase/server";
 import { getWeekResults } from "@/lib/queries/results";
 import { ResultsClient } from "./results-client";

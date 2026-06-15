@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createClient } from "@/lib/supabase/server";
 import { getAllUserPredictions } from "@/lib/queries/predictions";
 import { getAllIslanders } from "@/lib/queries/islanders";

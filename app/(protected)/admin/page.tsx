@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { redirect } from "next/navigation";
 import { isAdmin } from "@/lib/queries/admin";
 import { getAllIslanders, getActiveIslanders } from "@/lib/queries/islanders";
